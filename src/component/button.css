@@ -1,0 +1,9 @@
+.button:hover::after{
+    content: "Now!";
+    padding-left: 28px;
+}
+
+.button:hover::before {
+    content: "BUY!";
+    padding-right: 28px;
+   }
