@@ -1,34 +1,10 @@
 import React, { Component } from 'react';
 import Kartu from "../component/caard"
-import Kenapa from "../component/wtf"
-import styled from 'styled-components'
 import Axios from 'axios'
 import { mysqlapi } from "../helper/url"
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import './home.css';
-
-const Title = styled.h1`font-size: 1.5em;text-align: center;color: palevioletred;`;
-
-// Create a Wrapper component that'll render a <section> tag with some styles
-const Thing = styled.div.attrs((/* props */) => ({ tabIndex: 0 }))`
-  color: blue;
-  &:hover {
-    color: red; // <Thing> when hovered
-  }
-  & ~ & {
-    background: tomato; // <Thing> as a sibling of <Thing>, but maybe not directly next to it
-  }
-  & + & {
-    background: lime; // <Thing> next to <Thing>
-  }
-  &.something {
-    background: orange; // <Thing> tagged with an additional CSS class ".something"
-  }
-  .something-else & {
-    border: 1px solid; // <Thing> inside another element labeled ".something-else"
-  }
-`
 
 const responsive = {
     superLargeDesktop: {
@@ -108,7 +84,5 @@ class Home extends Component {
         );
     }
 }
-
-
 
 export default Home;

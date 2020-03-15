@@ -8,7 +8,6 @@ import CardMedia from '@material-ui/core/CardMedia';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import "./button.css"
-import styled from 'styled-components'
 import { connect } from "react-redux"
 import { kirimid } from '../redux/action'
 import { Link } from 'react-router-dom'
@@ -20,27 +19,14 @@ const useStyles = makeStyles({
     },
 });
 
-const Thing = styled.div.attrs((/* props */) => ({ tabIndex: 0 }))`
-  color: blue;
-  &:hover + &:after {
-    color: red; // <Thing> when hovered
-  }
-//   &::after {
-//     content: " BUY!";
-//   }
-  .button:hover::after & {
-    content: " BUY!";
-   }
-`
-
 const ImgMediaCard = (props) => {
     const classes = useStyles();
-
+    // () => this.props.kirimid(props.nama)
     return (
-        <Card className={classes.root} onClick={() => props.kirimid(props.kucing)
-        } >
-            <CardActionArea>
-                <Link to={`/game`}>
+        <Card className={classes.root} onClick={() => props.kirimid(props.kucing)} style={{ flex: 1 }} >
+            {/* <a onClick={console.log('kekirim')} href='/game'> */}
+            <Link to='/game'>
+                <CardActionArea>
                     <CardMedia
                         component="img"
                         alt="Contemplative Reptile"
@@ -52,8 +38,9 @@ const ImgMediaCard = (props) => {
                             {props.nama}
                         </Typography>
                     </CardContent>
-                </Link>
-            </CardActionArea>
+                </CardActionArea>
+            </Link>
+            {/* </a> */}
             <CardActions classes={{ root: classes.root }}>
                 <Button size="small" color="primary" className="button">
                     Rp {props.harga.toLocaleString()}

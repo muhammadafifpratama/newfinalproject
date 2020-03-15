@@ -14,6 +14,9 @@ import AccountCircle from '@material-ui/icons/AccountCircle';
 import MailIcon from '@material-ui/icons/Mail';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import MoreIcon from '@material-ui/icons/MoreVert';
+import { Link } from 'react-router-dom'
+import { connect } from "react-redux"
+import { searching } from '../redux/action'
 
 const useStyles = makeStyles(theme => ({
     grow: {
@@ -75,9 +78,12 @@ const useStyles = makeStyles(theme => ({
             display: 'none',
         },
     },
+    button: {
+        backgroundColor: 'RED',
+    }
 }));
 
-export default function PrimarySearchAppBar() {
+const PrimarySearchAppBar = (props) => {
     const classes = useStyles();
     const [anchorEl, setAnchorEl] = React.useState(null);
     const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
@@ -112,9 +118,12 @@ export default function PrimarySearchAppBar() {
             transformOrigin={{ vertical: 'top', horizontal: 'right' }}
             open={isMenuOpen}
             onClose={handleMenuClose}
-        >
-            <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
-            <MenuItem onClick={handleMenuClose}>My account</MenuItem>
+        ><Link to={`/profile`}>
+                <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
+            </Link>
+            <Link to={`/inventory`}>
+                <MenuItem onClick={handleMenuClose}>My account</MenuItem>
+            </Link>
         </Menu>
     );
 
@@ -159,33 +168,41 @@ export default function PrimarySearchAppBar() {
         </Menu>
     );
 
+    const textInput = React.createRef();
     return (
         <div className={classes.grow}>
             <AppBar position="static">
                 <Toolbar>
-                    <IconButton
-                        edge="start"
-                        className={classes.menuButton}
-                        color="inherit"
-                        aria-label="open drawer"
-                    >
-                        <MenuIcon />
-                    </IconButton>
+                    <Link to={`/`}>
+
+                        <IconButton
+                            edge="start"
+                            className={classes.menuButton}
+                            color="inherit"
+                            aria-label="open drawer"
+                        >
+                            <MenuIcon />
+                        </IconButton>
+                    </Link>
                     <Typography className={classes.title} variant="h6" noWrap>
                         Material-UI
           </Typography>
                     <div className={classes.search}>
-                        <div className={classes.searchIcon}>
-                            <SearchIcon />
-                        </div>
                         <InputBase
                             placeholder="Search…"
                             classes={{
                                 root: classes.inputRoot,
-                                input: classes.inputInput,
+                                input: classes.inputInput
                             }}
                             inputProps={{ 'aria-label': 'search' }}
+                            label="Username"
+                            inputRef={textInput}
                         />
+                        <Link to={`/search`}>
+                            <IconButton color="primary" aria-label="upload picture" component="span" onClick={() => props.searching(textInput.current.value)}>
+                                <SearchIcon />
+                            </IconButton>
+                        </Link>
                     </div>
                     <div className={classes.grow} />
                     <div className={classes.sectionDesktop}>
@@ -228,3 +245,5 @@ export default function PrimarySearchAppBar() {
         </div>
     );
 }
+
+export default connect(null, { searching })(PrimarySearchAppBar)

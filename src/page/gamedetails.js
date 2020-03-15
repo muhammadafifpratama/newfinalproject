@@ -2,27 +2,52 @@ import React, { Component } from 'react';
 import Axios from 'axios'
 import { mysqlapi } from "../helper/url"
 import { connect } from "react-redux"
-import Kartu from "../component/caard"
 import Button from '@material-ui/core/Button';
+import { kirimid } from '../redux/action'
 
 class GameDetails extends Component {
     state = { data: [] }
 
     componentDidMount() {
-        Axios.get(mysqlapi + 'home/' + this.props.id)
+        console.log(this.props.game);
+        Axios.get(mysqlapi + 'home/' + this.props.game)
             .then((res) => {
                 this.setState({ data: res.data[0] })
             })
     }
 
+    addtocart = async () => {
+        let username = localStorage.getItem('username');
+        let namagame = this.state.data.nama
+        let harga = this.state.data.harga
+        // let idgame = this.props.game
+        try {
+            let response = await Axios.post(mysqlapi + 'cart', {
+                username,
+                namagame,
+                harga
+            })
+            alert('game has been added to cart ')
+            console.log(response);
+        }
+        catch (err) {
+            console.log(err);
+            console.log(username);
+            console.log(namagame);
+            console.log(harga);
+        }
+    }
+
+
+
     render() {
-        console.log(this.props.id);
+        console.log(this.props.game.id);
         let { data } = this.state
         console.log(data);
         return (
             <div className='container full-height'>
                 <div className='row'>
-                    <div className='col-4'>
+                    <div>
                         <img src={data.gambar} alt='display poster' />
                     </div>
                     <div className='col-8'>
@@ -32,20 +57,25 @@ class GameDetails extends Component {
                             </h2>
                         </div>
                         <div className='vertical-spacing'>
+                            developers:
                             {data.developers}
                         </div>
                         <div className='vertical-spacing'>
+                            publishers:
                             {data.publishers}
                         </div>
                         <div className='vertical-spacing'>
+                            genres
                             {data.genres}
                         </div>
+                        <div dangerouslySetInnerHTML={{
+                            __html: `${data.description}`
+                        }} />
                         <div className='vertical-spacing'>
-                            {data.description}
+                            Price :
+                            Rp {data.harga}
                         </div>
-                        <div className='vertical-spacing' style={{ marginTop: '100px', float: 'right' }}>
-                            <Button color='danger' className='btn-custom' onClick={this.onBtnReservation}>Add to Cart</Button>
-                        </div>
+                        <Button color='danger' className='btn-custom' onClick={this.addtocart}>Add to Cart</Button>
                     </div>
                 </div>
             </div>
@@ -54,10 +84,7 @@ class GameDetails extends Component {
 }
 
 const mapStatetoProps = ({ game }) => {
-    return {
-        // game
-        id: game.id
-    }
+    return { game }
 }
 
-export default connect(mapStatetoProps)(GameDetails)
+export default connect(mapStatetoProps, { kirimid })(GameDetails)

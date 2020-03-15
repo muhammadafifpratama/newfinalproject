@@ -3,6 +3,8 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import Box from '@material-ui/core/Box';
 import Axios from "axios"
+import { mysqlapi } from '../helper/url'
+import { Redirect } from "react-router-dom";
 
 class Register extends Component {
 
@@ -15,63 +17,82 @@ class Register extends Component {
             confirm: "",
             char: false,
             num: false,
-            show: false,
             border: false,
-            cart: []
+            cart: [],
+            edirect: false,
+            spec: false,
+            huruf: false,
+            gede: false
         }
     }
 
-    handleChange = (event) => {
+    onChange = (event) => {
+        this.setState({ [event.target.name]: event.target.value })
+    }
+
+    cekpassword = (event) => {
         let pass = event.target.value
+        let gede = /[A-Z]/
         let num = /[0-9]/
-        // let spec = /[!@#$%^&*;]/
+        let spec = /[!@#$%^&*;]/
         this.setState({
             [event.target.name]: event.target.value,
             num: num.test(pass),
-            // spec: spec.test(pass),
+            spec: spec.test(pass),
             char: pass.length > 8,
-            border: (num.test(pass) && (pass.length > 8))
+            border: (num.test(pass) && (pass.length > 8)),
+            huruf: gede.test(pass),
         },
             console.log(event.target.value)
         )
     }
 
     registerUser = () => {
-        let { char, num, username, password, confirm, email, cart } = this.state
-        let role = 'user';
-
-
+        let { char, num, username, password, confirm, email, spec, border, huruf } = this.state
+        console.log(char + ' ' + num + ' ' + spec + ' ' + border);
         if (password !== confirm) {
-            alert('passwordnya ga cocok silahkan dicek lagi')
-        } else {
-            Axios.get(`http://localhost:2000/users?username=${username}`)
+            alert('pastikan password dan confirm password sama')
+        }
+        else if (username === '' || password === '' || confirm === '' || email === '') {
+            alert('please Fill in all the forms')
+        }
+        else if (char === false) {
+            alert('panjang password minimal 8')
+        }
+        else if (border === false) {
+            alert('panjang password minimal 8 dan harus memiliki angka')
+        }
+        else if (spec === false) {
+            alert('specials character needed')
+        }
+        else if (huruf === false) {
+            alert('need uppercase letter')
+        }
+        else {
+            Axios.post(mysqlapi + 'register', {
+                username,
+                email,
+                password
+            }).catch((err) => {
+                var error = JSON.stringify(err.response.data.message);
+                alert(error)
+            })
                 .then((res) => {
-                    console.log(res.data[0])
-                    if (res.data.length !== 0) {
-                        alert('username has been taken')
-                    } else {
-                        if (char && num) {
-                            Axios.post('http://localhost:2000/users', {
-                                username,
-                                password,
-                                role,
-                                email,
-                                cart
-                            })
-                                .then((res) => {
-                                    // this.props.Login(res.data[0])
-                                    // localStorage.setItem('username', res.data[0].username)
-                                })
-                        } else {
-                            alert('invalid password')
-                        }
+                    if (res === undefined) {
+                        console.log('no response');
+                    }
+                    else {
+                        alert('registration sucessful')
+                        this.setState({ edirect: true })
                     }
                 })
         }
     }
 
     render() {
-        let { char, num, show } = this.state
+        if (this.state.edirect) {
+            return <Redirect to='/login' />
+        }
         return (
             <div style={{
                 position: 'absolute', left: '50%', top: '50%',
@@ -82,51 +103,18 @@ class Register extends Component {
                         position: 'absolute', left: '50%', top: '50%',
                         transform: 'translate(-50%, -50%)'
                     }}>
-                        <TextField id="standard-basic" label="Username" onChange={this.handleChange} name="username" value={this.state.username} />
+                        <TextField id="standard-basic" label="Username" name="username" onChange={this.onChange} value={this.state.username} />
                         <br></br>
-                        <TextField id="standard-basic" label="Email" onChange={this.handleChange} name="email" value={this.state.email} />
+                        <TextField id="standard-basic" label="Email" name="email" onChange={this.onChange} value={this.state.email} />
                         <br></br>
-                        <TextField id="standard-password-input" label="Password" type="password" onChange={this.handleChange} name="password" value={this.state.password} />
+                        <TextField id="standard-password-input" label="Password" type="password" onChange={this.cekpassword} name="password" value={this.state.password} />
                         <br></br>
-                        <TextField id="standard-password-input" label="confirm" type="password" onChange={this.handleChange} name="confirm" value={this.state.confirm} />
+                        <TextField id="standard-password-input" label="confirm password" type="password" name="confirm" onChange={this.onChange} value={this.state.confirm} />
                         <br></br>
                         <Button variant="contained" color="secondary" style={{ minWidth: '185px' }} onClick={this.registerUser}>Register</Button>
-
                         {/* password harus memiliki angka tanda baca dan panjangnya harus 8 karakter atau lebih */}
-
                     </div>
                 </Box >
-                {
-                    show
-                        ?
-                        <div>
-                            {
-                                char
-                                    ?
-                                    <div style={{ color: 'green' }}>
-                                        Password length must be 8 or more Characters
-                                        console.log("Password length must be 8 or more Characters")
-                            </div>
-                                    :
-                                    <div style={{ color: 'red' }}>
-                                        Password length must be 8 or more Characters
-                            </div>
-                            }
-                            {
-                                num
-                                    ?
-                                    <div style={{ color: 'green' }}>
-                                        Password must include number
-                            </div>
-                                    :
-                                    <div style={{ color: 'red' }}>
-                                        Password must include number
-                            </div>
-                            }
-                        </div>
-                        :
-                        null
-                }
             </ div >
         )
     }

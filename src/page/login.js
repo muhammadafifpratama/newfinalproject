@@ -4,14 +4,12 @@ import Button from '@material-ui/core/Button';
 import Box from '@material-ui/core/Box';
 import { Link, Redirect } from 'react-router-dom'
 import Axios from "axios"
+import { mysqlapi } from '../helper/url'
 
 class Loginpage extends Component {
     state = {
-        error: false
-    }
-
-    handleChange = (event) => {
-        this.setState({ [event.target.name]: event.target.value })
+        error: false,
+        edirect: false
     }
 
     loginUser = () => {
@@ -22,43 +20,34 @@ class Loginpage extends Component {
         if (username === '' || password === '') {
             alert('Fill in all the forms')
         } else {
-            Axios.get(`http://localhost:2000/data/login?username=${username}&password=${password}`, {
+            // Axios.get(mysqlapi + 'login/' + username + '/' + password)
+            Axios.get(mysqlapi + 'login', {
                 username,
                 password
             })
-                .then((res) => {
-                    if (res.data.length === 0) {
-                        alert("user nor found")
-                        Axios.get(`http://localhost:2000/users?email=${username}&password=${password}`, {
-                            username,
-                            password
-                        })
-                            .then((res) => {
-                                if (res.data.length === 0) {
-                                    alert('username or email or password invalid')
-                                }
-                                else {
-                                    this.props.Login(res.data[0])
-                                    localStorage.setItem('username', res.data[0].username)
-                                }
-                            })
-                    } else {
-                        alert("berhasil")
-                        this.props.Login(res.data[0])
-                        localStorage.setItem('username', res.data[0].username)
-                        // console.log(this.props.username)
-                    }
-                })
                 .catch((err) => {
-                    console.log(err)
+                    var error = JSON.stringify(err.response.data.message);
+                    console.log(err.response.data);
+                    alert(error)
+                })
+                .then((res) => {
+                    if (res === undefined) {
+                        console.log('no response');
+                    }
+                    else {
+                        alert('welcome ' + res.data[0].username)
+                        localStorage.setItem('username', res.data[0].username)
+                        this.setState({ edirect: true })
+                    }
                 })
         }
     }
 
     render() {
-        console.log(this.props.username)
+        if (this.state.edirect) {
+            return <Redirect to='/' />
+        }
         return (
-
             <div style={{
                 position: 'absolute', left: '50%', top: '50%',
                 transform: 'translate(-50%, -50%)'
