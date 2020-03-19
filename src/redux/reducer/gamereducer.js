@@ -1,5 +1,5 @@
 const initial_state = {
-    id: 1, strsrch: ''
+    id: 1, strsrch: '', user: ''
 }
 
 export default (asd = initial_state, action) => {
@@ -10,7 +10,10 @@ export default (asd = initial_state, action) => {
         case 'search':
             console.log(action.payload);
             return action.payload
+        case 'transaction':
+            console.log(action.payload);
+            return action.payload
         default:
-            return 1
+            return asd
     }
 }

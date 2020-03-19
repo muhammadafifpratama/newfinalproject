@@ -17,6 +17,9 @@ import MoreIcon from '@material-ui/icons/MoreVert';
 import { Link } from 'react-router-dom'
 import { connect } from "react-redux"
 import { searching } from '../redux/action'
+import App from '../App';
+import { Button } from '@material-ui/core';
+import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 
 const useStyles = makeStyles(theme => ({
     grow: {
@@ -122,11 +125,10 @@ const PrimarySearchAppBar = (props) => {
                 <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
             </Link>
             <Link to={`/inventory`}>
-                <MenuItem onClick={handleMenuClose}>My account</MenuItem>
+                <MenuItem onClick={handleMenuClose}>inventory</MenuItem>
             </Link>
         </Menu>
     );
-
     const mobileMenuId = 'primary-search-account-menu-mobile';
     const renderMobileMenu = (
         <Menu
@@ -169,81 +171,142 @@ const PrimarySearchAppBar = (props) => {
     );
 
     const textInput = React.createRef();
-    return (
-        <div className={classes.grow}>
-            <AppBar position="static">
-                <Toolbar>
-                    <Link to={`/`}>
-
-                        <IconButton
-                            edge="start"
-                            className={classes.menuButton}
-                            color="inherit"
-                            aria-label="open drawer"
-                        >
-                            <MenuIcon />
-                        </IconButton>
-                    </Link>
-                    <Typography className={classes.title} variant="h6" noWrap>
-                        Material-UI
-          </Typography>
-                    <div className={classes.search}>
-                        <InputBase
-                            placeholder="Search…"
-                            classes={{
-                                root: classes.inputRoot,
-                                input: classes.inputInput
-                            }}
-                            inputProps={{ 'aria-label': 'search' }}
-                            label="Username"
-                            inputRef={textInput}
-                        />
-                        <Link to={`/search`}>
-                            <IconButton color="primary" aria-label="upload picture" component="span" onClick={() => props.searching(textInput.current.value)}>
-                                <SearchIcon />
+    var username = localStorage.getItem('username');
+    console.log(username);
+    if (username == null) {
+        return (
+            <div className={classes.grow}>
+                <AppBar position="static">
+                    <Toolbar>
+                        <Link to={`/`}>
+                            <IconButton
+                                edge="start"
+                                className={classes.menuButton}
+                                color="inherit"
+                                aria-label="open drawer"
+                            >
+                                <MenuIcon />
                             </IconButton>
                         </Link>
-                    </div>
-                    <div className={classes.grow} />
-                    <div className={classes.sectionDesktop}>
-                        <IconButton aria-label="show 4 new mails" color="inherit">
-                            <Badge badgeContent={4} color="secondary">
-                                <MailIcon />
-                            </Badge>
-                        </IconButton>
-                        <IconButton aria-label="show 17 new notifications" color="inherit">
-                            <Badge badgeContent={17} color="secondary">
-                                <NotificationsIcon />
-                            </Badge>
-                        </IconButton>
-                        <IconButton
-                            edge="end"
-                            aria-label="account of current user"
-                            aria-controls={menuId}
-                            aria-haspopup="true"
-                            onClick={handleProfileMenuOpen}
-                            color="inherit"
-                        >
-                            <AccountCircle />
-                        </IconButton>
-                    </div>
-                    <div className={classes.sectionMobile}>
-                        <IconButton
-                            aria-label="show more"
-                            aria-controls={mobileMenuId}
-                            aria-haspopup="true"
-                            onClick={handleMobileMenuOpen}
-                            color="inherit"
-                        >
-                            <MoreIcon />
-                        </IconButton>
-                    </div>
-                </Toolbar>
-            </AppBar>
-            {renderMobileMenu}
-            {renderMenu}
-        </div>
-    );
+                        <Typography className={classes.title} variant="h6" noWrap>
+                            Material-UI
+          </Typography>
+                        <div className={classes.search}>
+                            <InputBase
+                                placeholder="Search…"
+                                classes={{
+                                    root: classes.inputRoot,
+                                    input: classes.inputInput
+                                }}
+                                inputProps={{ 'aria-label': 'search' }}
+                                label="Username"
+                                inputRef={textInput}
+                            />
+                            <Link to={`/search`}>
+                                <IconButton color="primary" aria-label="upload picture" component="span" onClick={() => props.searching(textInput.current.value)}>
+                                    <SearchIcon />
+                                </IconButton>
+                            </Link>
+                        </div>
+                        <div className={classes.grow} />
+                        <div className={classes.sectionDesktop}>
+                            <Link to={`/login`}>
+                                <IconButton
+                                    edge="end"
+                                    aria-label="account of current user"
+                                    aria-controls={menuId}
+                                    aria-haspopup="true"
+                                    color="inherit"
+                                >
+                                    <AccountCircle />Log in
+                            </IconButton>
+                            </Link>
+                            <Link to={`/register`}>
+                                <Button>SIGN UP</Button>
+                            </Link>
+                        </div>
+                    </Toolbar>
+                </AppBar>
+            </div>
+        )
+    }
+    else {
+        return (
+            <div className={classes.grow}>
+                <AppBar position="static">
+                    <Toolbar>
+                        <Link to={`/`}>
+
+                            <IconButton
+                                edge="start"
+                                className={classes.menuButton}
+                                color="inherit"
+                                aria-label="open drawer"
+                            >
+                                <MenuIcon />
+                            </IconButton>
+                        </Link>
+                        <Typography className={classes.title} variant="h6" noWrap>
+                            Material-UI
+      </Typography>
+                        <div className={classes.search}>
+                            <InputBase
+                                placeholder="Search…"
+                                classes={{
+                                    root: classes.inputRoot,
+                                    input: classes.inputInput
+                                }}
+                                inputProps={{ 'aria-label': 'search' }}
+                                label="Username"
+                                inputRef={textInput}
+                            />
+                            <Link to={`/search`}>
+                                <IconButton color="primary" aria-label="upload picture" component="span" onClick={() => props.searching(textInput.current.value)}>
+                                    <SearchIcon />
+                                </IconButton>
+                            </Link>
+                        </div>
+                        <div className={classes.grow} />
+                        <div className={classes.sectionDesktop}>
+                            <IconButton aria-label="show 4 new mails" color="inherit">
+                                <Badge badgeContent={4} color="secondary">
+                                    <MailIcon />
+                                </Badge>
+                            </IconButton>
+                            <Link to={`/cart`}>
+                                <IconButton aria-label="show 17 new notifications" color="inherit">
+                                    < ShoppingCartIcon />
+                                </IconButton>
+                            </Link>
+                            <IconButton
+                                edge="end"
+                                aria-label="account of current user"
+                                aria-controls={menuId}
+                                aria-haspopup="true"
+                                onClick={handleProfileMenuOpen}
+                                color="inherit"
+                            >
+                                <AccountCircle />{username}
+                            </IconButton>
+                        </div>
+                        <div className={classes.sectionMobile}>
+                            <IconButton
+                                aria-label="show more"
+                                aria-controls={mobileMenuId}
+                                aria-haspopup="true"
+                                onClick={handleMobileMenuOpen}
+                                color="inherit"
+                            >
+                                <MoreIcon />
+                            </IconButton>
+                        </div>
+                    </Toolbar>
+                </AppBar>
+                {renderMobileMenu}
+                {renderMenu}
+            </div>
+        )
+    }
 }
 
 export default connect(null, { searching })(PrimarySearchAppBar)

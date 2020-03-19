@@ -50,6 +50,7 @@ class Register extends Component {
     registerUser = () => {
         let { char, num, username, password, confirm, email, spec, border, huruf } = this.state
         console.log(char + ' ' + num + ' ' + spec + ' ' + border);
+        let role = 'user'
         if (password !== confirm) {
             alert('pastikan password dan confirm password sama')
         }
@@ -72,7 +73,8 @@ class Register extends Component {
             Axios.post(mysqlapi + 'register', {
                 username,
                 email,
-                password
+                password,
+                role
             }).catch((err) => {
                 var error = JSON.stringify(err.response.data.message);
                 alert(error)

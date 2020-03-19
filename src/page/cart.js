@@ -10,6 +10,7 @@ import Paper from '@material-ui/core/Paper';
 import DeleteIcon from '@material-ui/icons/Delete';
 import IconButton from '@material-ui/core/IconButton';
 import { Button } from '@material-ui/core';
+import moment from 'moment';
 
 class cart extends Component {
     state = { data: [], totalharga: [] }
@@ -48,6 +49,40 @@ class cart extends Component {
             })
     }
 
+    keygenerator = () => {
+        var asd1 = Math.random().toString(16).substr(0, 7).split('.');
+        var asd2 = Math.random().toString(36).substr(0, 7).split('.');
+        var asd3 = Math.random().toString(36).substr(0, 7).split('.');
+        var key = asd1[1] + '-' + asd2[1] + '-' + asd3[1]
+        return key
+    }
+
+    inventory = async () => {
+        console.log(this.state.data);
+        let daftargame = ''
+        for (let i = 0; i < this.state.data.length; i++) {
+            let namagame = this.state.data[i].namagame
+            daftargame += namagame + ','
+        }
+        let username = localStorage.getItem('username');
+        let hargatotal = this.state.totalharga
+        // var transactiondate = moment().format("YYYY-MM-DD H:mm:ss")
+        let response = await Axios.post(mysqlapi + 'inventory', { username, hargatotal, daftargame })
+        // console.log(response.data);
+        for (let i = 0; i < this.state.data.length; i++) {
+            let namagame = this.state.data[i].namagame
+            try {
+                let key = this.keygenerator()
+                let bwaaaaaaah = await Axios.post(mysqlapi + 'transaction', { username, key, namagame})
+            } catch (error) {
+                console.log(error.response.data);
+            }
+        }
+        let empty = await Axios.delete(mysqlapi + 'transaction/' + username)
+        console.log(empty.data);
+        alert('finally moving to transaction detail')
+    }
+
     render() {
         return (<div><TableContainer component={Paper}>
             <Table aria-label="spanning table">
@@ -62,7 +97,7 @@ class cart extends Component {
                     <TableRow>
                         <TableCell >Subtotal </TableCell>
                         <TableCell >{this.state.totalharga}</TableCell>
-                        <Button>
+                        <Button onClick={() => { this.inventory() }}>
                             confirm purchases
                         </Button>
                     </TableRow>

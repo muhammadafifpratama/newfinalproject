@@ -25,11 +25,11 @@ class search extends Component {
     }
 
     render() {
-        console.log(this.state.data)
+        console.log(this.props.game)
         return (<div>
             <div class="container">
                 {/* <div class="row"> */}
-                        {this.renderkartu()}
+                {this.renderkartu()}
                 {/* </div> */}
             </div>
         </div>);

@@ -20,11 +20,11 @@ class Loginpage extends Component {
         if (username === '' || password === '') {
             alert('Fill in all the forms')
         } else {
-            // Axios.get(mysqlapi + 'login/' + username + '/' + password)
-            Axios.get(mysqlapi + 'login', {
-                username,
-                password
-            })
+            Axios.get(mysqlapi + 'login/' + username + '/' + password)
+                // Axios.get(mysqlapi + 'login', {
+                //     username,
+                //     password
+                // })
                 .catch((err) => {
                     var error = JSON.stringify(err.response.data.message);
                     console.log(err.response.data);

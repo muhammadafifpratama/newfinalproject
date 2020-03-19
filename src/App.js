@@ -11,7 +11,9 @@ import profile from './page/profile'
 import inventory from './page/inventory'
 import cart from './page/cart'
 import asd from './page/tes'
-
+import admin from './component/collapsiblelist'
+import haaaah from './page/admin'
+import bungung from './page/adminlagi'
 class App extends Component {
   state = {}
   render() {
@@ -29,6 +31,9 @@ class App extends Component {
           <Route path="/inventory" component={inventory} />
           <Route path="/cart" component={cart} />
           <Route path="/aaa" component={asd} />
+          <Route path="/admin" component={admin} />
+          <Route path="/admintes" component={haaaah} />
+          <Route path="/admintes1" component={bungung} />
         </Switch>
       </div>
     );
