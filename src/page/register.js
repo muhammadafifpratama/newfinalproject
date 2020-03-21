@@ -77,6 +77,7 @@ class Register extends Component {
                 role
             }).catch((err) => {
                 var error = JSON.stringify(err.response.data.message);
+                console.log(err.response.data);
                 alert(error)
             })
                 .then((res) => {

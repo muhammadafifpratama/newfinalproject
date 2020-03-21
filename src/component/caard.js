@@ -39,13 +39,13 @@ const ImgMediaCard = (props) => {
                         </Typography>
                     </CardContent>
                 </CardActionArea>
+                {/* </a> */}
+                <CardActions classes={{ root: classes.root }}>
+                    <Button size="small" color="primary" className="button">
+                        Rp {props.harga.toLocaleString()}
+                    </Button>
+                </CardActions>
             </Link>
-            {/* </a> */}
-            <CardActions classes={{ root: classes.root }}>
-                <Button size="small" color="primary" className="button">
-                    Rp {props.harga.toLocaleString()}
-                </Button>
-            </CardActions>
         </Card >
     );
 }

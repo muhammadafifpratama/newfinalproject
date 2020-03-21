@@ -20,6 +20,7 @@ import { searching } from '../redux/action'
 import App from '../App';
 import { Button } from '@material-ui/core';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 
 const useStyles = makeStyles(theme => ({
     grow: {
@@ -111,6 +112,11 @@ const PrimarySearchAppBar = (props) => {
         setMobileMoreAnchorEl(event.currentTarget);
     };
 
+    const logout = () => {
+        console.log('wai');
+
+        localStorage.removeItem('username');
+    }
     const menuId = 'primary-search-account-menu';
     const renderMenu = (
         <Menu
@@ -127,6 +133,9 @@ const PrimarySearchAppBar = (props) => {
             <Link to={`/inventory`}>
                 <MenuItem onClick={handleMenuClose}>inventory</MenuItem>
             </Link>
+            <Link to={`/`}>
+                <MenuItem onClick={() => { logout() }}>LOGOUT</MenuItem>
+            </Link>
         </Menu>
     );
     const mobileMenuId = 'primary-search-account-menu-mobile';
@@ -141,20 +150,20 @@ const PrimarySearchAppBar = (props) => {
             onClose={handleMobileMenuClose}
         >
             <MenuItem>
-                <IconButton aria-label="show 4 new mails" color="inherit">
-                    <Badge badgeContent={4} color="secondary">
-                        <MailIcon />
-                    </Badge>
-                </IconButton>
-                <p>Messages</p>
+                <Link to={`/cart`}>
+                    <IconButton aria-label="show 17 new notifications" color="inherit">
+                        < ShoppingCartIcon />
+                        Cart
+                    </IconButton>
+                </Link>
             </MenuItem>
             <MenuItem>
-                <IconButton aria-label="show 11 new notifications" color="inherit">
-                    <Badge badgeContent={11} color="secondary">
-                        <NotificationsIcon />
-                    </Badge>
-                </IconButton>
-                <p>Notifications</p>
+                {/* <Link to={`/cart`}> */}
+                <IconButton aria-label="show 17 new notifications" color="inherit" onClick={() => { logout() }}>
+                    < ExitToAppIcon />
+                        LOGOUT
+                    </IconButton>
+                {/* </Link> */}
             </MenuItem>
             <MenuItem onClick={handleProfileMenuOpen}>
                 <IconButton
@@ -218,11 +227,73 @@ const PrimarySearchAppBar = (props) => {
                                     aria-haspopup="true"
                                     color="inherit"
                                 >
-                                    <AccountCircle />Log in
+                                    Sign In
                             </IconButton>
                             </Link>
                             <Link to={`/register`}>
-                                <Button>SIGN UP</Button>
+                                <IconButton
+                                    edge="end"
+                                    aria-label="account of current user"
+                                    aria-controls={menuId}
+                                    aria-haspopup="true"
+                                    color="inherit"
+                                >
+                                    Sign Up
+                            </IconButton>
+                            </Link>
+                        </div>
+                    </Toolbar>
+                </AppBar>
+            </div>
+        )
+    }
+    else if (username === 'admin') {
+        return (
+            <div className={classes.grow}>
+                <AppBar position="static">
+                    <Toolbar>
+                        <Link to={`/`}>
+                            <IconButton
+                                edge="start"
+                                className={classes.menuButton}
+                                color="inherit"
+                                aria-label="open drawer"
+                            >
+                                <MenuIcon />
+                            </IconButton>
+                        </Link>
+                        <Typography className={classes.title} variant="h6" noWrap>
+                            Material-UI
+          </Typography>
+                        <div className={classes.search}>
+                            <InputBase
+                                placeholder="Search…"
+                                classes={{
+                                    root: classes.inputRoot,
+                                    input: classes.inputInput
+                                }}
+                                inputProps={{ 'aria-label': 'search' }}
+                                label="Username"
+                                inputRef={textInput}
+                            />
+                            <Link to={`/search`}>
+                                <IconButton color="primary" aria-label="upload picture" component="span" onClick={() => props.searching(textInput.current.value)}>
+                                    <SearchIcon />
+                                </IconButton>
+                            </Link>
+                        </div>
+                        <div className={classes.grow} />
+                        <div className={classes.sectionDesktop}>
+                            <Link to={`/admintes1`}>
+                                <IconButton
+                                    edge="end"
+                                    aria-label="account of current user"
+                                    aria-controls={menuId}
+                                    aria-haspopup="true"
+                                    color="inherit"
+                                >
+                                    Sign In
+                            </IconButton>
                             </Link>
                         </div>
                     </Toolbar>
@@ -236,7 +307,6 @@ const PrimarySearchAppBar = (props) => {
                 <AppBar position="static">
                     <Toolbar>
                         <Link to={`/`}>
-
                             <IconButton
                                 edge="start"
                                 className={classes.menuButton}
@@ -268,11 +338,6 @@ const PrimarySearchAppBar = (props) => {
                         </div>
                         <div className={classes.grow} />
                         <div className={classes.sectionDesktop}>
-                            <IconButton aria-label="show 4 new mails" color="inherit">
-                                <Badge badgeContent={4} color="secondary">
-                                    <MailIcon />
-                                </Badge>
-                            </IconButton>
                             <Link to={`/cart`}>
                                 <IconButton aria-label="show 17 new notifications" color="inherit">
                                     < ShoppingCartIcon />

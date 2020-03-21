@@ -40,7 +40,9 @@ class GameDetails extends Component {
         }
     }
 
-
+    open = () => {
+        { window.open('https://store.steampowered.com/app/' + this.state.data.steamid) }
+    }
 
     render() {
         console.log(this.props.game.id);
@@ -77,10 +79,14 @@ class GameDetails extends Component {
                             Price :
                             Rp {data.harga}
                         </div>
+                        <a onClick={() => { this.open() }} >
+                            click here to view the game on steam
+                        </a>
+                        <br />
                         <Button color='danger' className='btn-custom' onClick={this.addtocart}>Add to Cart</Button>
                     </div>
                 </div>
-            </div>
+            </div >
         );
     }
 }

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Collapsible from 'react-collapsible';
 import Axios from 'axios'
 import { mysqlapi } from "../helper/url"
+import Grid from '@material-ui/core/Grid';
 
 class APP extends Component {
     state = { username: [] }
@@ -22,20 +23,34 @@ class APP extends Component {
     }
 
     setusername = async () => {
-        
+
     }
 
     render() {
         return (
             <div>
-                <Collapsible trigger={`${this} v`}>
-                    isi.map((item)=> {
-                        <Collapsible trigger="Start here">
-                            <p>This is the collapsible content. It can be any element or React component you like.</p>
-                            <p>It can even be another Collapsible component. Check out the next section!</p>
-                        </Collapsible>
-                    })
-                </Collapsible>
+                <a href='/'>
+                    <Grid container spacing={2}>
+                        <Grid item xs={12}>
+                            <Grid container justify="center" spacing={3}>
+                                {[0, 1, 2, 3].map(value => (
+                                    <Grid key={value} item>
+                                        <div>
+                                            <img class="entity-image" src={value.gambar} alt=""></img>
+                                            <div>
+                                                <span class="entity-title">Phoenix Wright: Ace Attorney Trilogy</span>
+                                            </div>
+                                            <div>
+                                                <span class="entity-title">harga</span>
+                                            </div>
+                                        </div>
+                                    </Grid>
+                                ))}
+                            </Grid>
+                        </Grid>
+                    </Grid>
+
+                </a>
             </div>
         )
     }

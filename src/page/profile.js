@@ -18,6 +18,7 @@ class profile extends Component {
                 username : {this.state.profile.username}
             </p>
             email : {this.state.profile.email}
+            <p>balance : {this.state.profile.saldo}</p>
         </div>);
     }
 }

@@ -11,9 +11,10 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import IconButton from '@material-ui/core/IconButton';
 import { Button } from '@material-ui/core';
 import moment from 'moment';
+import { Redirect } from 'react-router-dom';
 
 class cart extends Component {
-    state = { data: [], totalharga: [] }
+    state = { data: [], totalharga: 0, redirect: false }
     componentDidMount() {
         let username = localStorage.getItem('username');
         Axios.get(mysqlapi + 'cart/' + username)
@@ -66,45 +67,68 @@ class cart extends Component {
         }
         let username = localStorage.getItem('username');
         let hargatotal = this.state.totalharga
-        // var transactiondate = moment().format("YYYY-MM-DD H:mm:ss")
-        let response = await Axios.post(mysqlapi + 'inventory', { username, hargatotal, daftargame })
-        // console.log(response.data);
-        for (let i = 0; i < this.state.data.length; i++) {
-            let namagame = this.state.data[i].namagame
-            try {
-                let key = this.keygenerator()
-                let bwaaaaaaah = await Axios.post(mysqlapi + 'transaction', { username, key, namagame})
-            } catch (error) {
-                console.log(error.response.data);
+        let isi = await Axios.get(mysqlapi + 'profile/' + username)
+        let wallet = isi.data[0].saldo
+        let saldo = wallet - hargatotal
+        console.log(isi.data[0].saldo);
+        if (hargatotal === 0) {
+            alert('beli game dulu')
+        }
+        else {
+            if (wallet < hargatotal) {
+                alert("saldo tidak cukup")
+            }
+            else {
+                // console.log(isi);
+                let update = await Axios.patch(mysqlapi + 'saldo', { saldo, username })
+                // var transactiondate = moment().format("YYYY-MM-DD H:mm:ss")
+                let response = await Axios.post(mysqlapi + 'inventory', { username, hargatotal, daftargame })
+                // console.log(response.data);
+                for (let i = 0; i < this.state.data.length; i++) {
+                    let namagame = this.state.data[i].namagame
+                    try {
+                        let key = this.keygenerator()
+                        let bwaaaaaaah = await Axios.post(mysqlapi + 'transaction', { username, key, namagame })
+                    } catch (error) {
+                        console.log(error.response.data);
+                    }
+                }
+                let empty = await Axios.delete(mysqlapi + 'transaction/' + username)
+                console.log(empty.data);
+                alert('transaction succesful')
+                this.setState({ redirect: true })
             }
         }
-        let empty = await Axios.delete(mysqlapi + 'transaction/' + username)
-        console.log(empty.data);
-        alert('finally moving to transaction detail')
     }
 
     render() {
-        return (<div><TableContainer component={Paper}>
-            <Table aria-label="spanning table">
-                <TableBody>
-                    {this.state.data.map(row => (
-                        <TableRow key={row.idcart}>
-                            <TableCell>{row.namagame}</TableCell>
-                            <TableCell align="right">{row.harga}</TableCell>
-                            <IconButton aria-label="delete" onClick={() => { this.deletecart(row.idcart) }}> <DeleteIcon /></IconButton>
-                        </TableRow>
-                    ))}
-                    <TableRow>
-                        <TableCell >Subtotal </TableCell>
-                        <TableCell >{this.state.totalharga}</TableCell>
-                        <Button onClick={() => { this.inventory() }}>
-                            confirm purchases
+        console.log(this.state.totalharga);
+        if (this.state.redirect) {
+            return <Redirect to='/finish' />
+        }
+        return (
+            <div>
+                <TableContainer component={Paper}>
+                    <Table aria-label="spanning table">
+                        <TableBody>
+                            {this.state.data.map(row => (
+                                <TableRow key={row.idcart}>
+                                    <TableCell>{row.namagame}</TableCell>
+                                    <TableCell align="right">Rp. {row.harga.toLocaleString()}</TableCell>
+                                    <IconButton aria-label="delete" onClick={() => { this.deletecart(row.idcart) }}> <DeleteIcon /></IconButton>
+                                </TableRow>
+                            ))}
+                            <TableRow>
+                                <TableCell >Subtotal </TableCell>
+                                <Button onClick={() => { this.inventory() }}>
+                                    confirm purchases
                         </Button>
-                    </TableRow>
-                </TableBody>
-            </Table>
-        </TableContainer>
-        </div>);
+                            </TableRow>
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+            </div>
+        );
     }
 }
 

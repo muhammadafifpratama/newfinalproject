@@ -14,6 +14,8 @@ import asd from './page/tes'
 import admin from './component/collapsiblelist'
 import haaaah from './page/admin'
 import bungung from './page/adminlagi'
+import wuuu from './component/tes'
+import thanks from './page/thankyou'
 class App extends Component {
   state = {}
   render() {
@@ -34,6 +36,8 @@ class App extends Component {
           <Route path="/admin" component={admin} />
           <Route path="/admintes" component={haaaah} />
           <Route path="/admintes1" component={bungung} />
+          <Route path="/asd" component={wuuu} />
+          <Route path="/finish" component={thanks} />
         </Switch>
       </div>
     );

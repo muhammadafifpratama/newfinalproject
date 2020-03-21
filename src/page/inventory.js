@@ -10,8 +10,9 @@ import Paper from '@material-ui/core/Paper';
 import { Button } from '@material-ui/core';
 let username = localStorage.getItem('username');
 class inventory extends Component {
-    state = { data: [], ofset: 1 }
+    state = { data: [], ofset: 0 }
     componentDidMount() {
+        console.log(username);
         Axios.get(mysqlapi + 'inventory/' + username + '/' + this.state.ofset)
             .then((res) => {
                 console.log(res.data);
@@ -19,13 +20,16 @@ class inventory extends Component {
             })
     }
 
+    ngetes = () => {
+    }
+
     nextpage = async () => {
         let ofset = this.state.ofset + 10
         try {
-            let panjang = Axios.get(mysqlapi + 'panjang/' + username)
+            let panjang = await Axios.get(mysqlapi + 'panjang/' + username)
             let cekpanjang = ((await panjang).data[0].panjang);
             if (ofset < cekpanjang) {
-                let response = Axios.get(mysqlapi + 'inventory/' + username + '/' + ofset)
+                let response = await Axios.get(mysqlapi + 'inventory/' + username + '/' + ofset)
                 this.setState({ data: (await response).data, ofset: ofset });
             }
             else {
@@ -43,7 +47,7 @@ class inventory extends Component {
             console.log('ini page pertama');
         }
         else {
-            let response = Axios.get(mysqlapi + 'inventory/' + username + '/' + ofset)
+            let response = await Axios.get(mysqlapi + 'inventory/' + username + '/' + ofset)
             this.setState({ data: (await response).data, ofset: ofset });
         }
         console.log(ofset);
@@ -51,7 +55,7 @@ class inventory extends Component {
 
     render() {
         console.log(this.state.ofset);
-
+        { this.ngetes() }
         return (<div><TableContainer component={Paper}>
             <Table aria-label="spanning table">
                 <TableBody>
@@ -63,12 +67,16 @@ class inventory extends Component {
                     ))}
                 </TableBody>
                 <TableRow>
-                    <TableCell>                <Button onClick={() => { this.prevpage() }}>
-                        previous page
-                        </Button></TableCell>
-                    <TableCell align="right">                <Button onClick={() => { this.nextpage() }}>
-                        next page
-                        </Button></TableCell>
+                    <TableCell>
+                        <Button onClick={() => { this.prevpage() }}>
+                            previous page
+                        </Button>
+                    </TableCell>
+                    <TableCell align="right">
+                        <Button onClick={() => { this.nextpage() }}>
+                            next page
+                        </Button>
+                    </TableCell>
                 </TableRow>
             </Table>
         </TableContainer>
