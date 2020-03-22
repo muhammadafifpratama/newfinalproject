@@ -23,14 +23,20 @@ class GameDetails extends Component {
         // let idgame = this.props.game
         try {
             let verifikasi = await Axios.get(mysqlapi + 'cart/' + username)
-            verifikasi.data.map(val => (val.namagame))
-            let response = await Axios.post(mysqlapi + 'cart', {
-                username,
-                namagame,
-                harga
+            if(username == null){
+                alert('silahkan login dulu ')
+            }
+            else {
+
+                verifikasi.data.map(val => (val.namagame))
+                let response = await Axios.post(mysqlapi + 'cart', {
+                    username,
+                    namagame,
+                    harga
             })
             alert('game has been added to cart ')
             console.log(verifikasi.data);
+        }
         }
         catch (err) {
             console.log(err);

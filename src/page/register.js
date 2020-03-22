@@ -22,7 +22,8 @@ class Register extends Component {
             edirect: false,
             spec: false,
             huruf: false,
-            gede: false
+            gede: false,
+            aaa: false
         }
     }
 
@@ -35,6 +36,7 @@ class Register extends Component {
         let gede = /[A-Z]/
         let num = /[0-9]/
         let spec = /[!@#$%^&*;]/
+
         this.setState({
             [event.target.name]: event.target.value,
             num: num.test(pass),
@@ -47,10 +49,19 @@ class Register extends Component {
         )
     }
 
+    tes = (event) => {
+        let pass = event.target.value
+        let at = /[@]/
+        let dot = /[.]/
+        this.setState({
+            [event.target.name]: event.target.value,
+            aaa: (at.test(pass) && dot.test(pass))
+        })
+    }
+
     registerUser = () => {
-        let { char, num, username, password, confirm, email, spec, border, huruf } = this.state
-        console.log(char + ' ' + num + ' ' + spec + ' ' + border);
-        let role = 'user'
+        let { char, num, username, password, confirm, email, spec, border, huruf, aaa } = this.state
+        console.log(aaa);
         if (password !== confirm) {
             alert('pastikan password dan confirm password sama')
         }
@@ -69,12 +80,14 @@ class Register extends Component {
         else if (huruf === false) {
             alert('need uppercase letter')
         }
+        else if (aaa === false) {
+            alert('wrong email format')
+        }
         else {
             Axios.post(mysqlapi + 'register', {
                 username,
                 email,
-                password,
-                role
+                password
             }).catch((err) => {
                 var error = JSON.stringify(err.response.data.message);
                 console.log(err.response.data);
@@ -108,7 +121,7 @@ class Register extends Component {
                     }}>
                         <TextField id="standard-basic" label="Username" name="username" onChange={this.onChange} value={this.state.username} />
                         <br></br>
-                        <TextField id="standard-basic" label="Email" name="email" onChange={this.onChange} value={this.state.email} />
+                        <TextField id="standard-basic" label="Email" name="email" onChange={this.tes} value={this.state.email} />
                         <br></br>
                         <TextField id="standard-password-input" label="Password" type="password" onChange={this.cekpassword} name="password" value={this.state.password} />
                         <br></br>

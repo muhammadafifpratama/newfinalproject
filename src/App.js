@@ -16,6 +16,7 @@ import haaaah from './page/admin'
 import bungung from './page/adminlagi'
 import wuuu from './component/tes'
 import thanks from './page/thankyou'
+
 class App extends Component {
   state = {}
   render() {

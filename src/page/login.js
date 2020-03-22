@@ -20,11 +20,11 @@ class Loginpage extends Component {
         if (username === '' || password === '') {
             alert('Fill in all the forms')
         } else {
-            Axios.get(mysqlapi + 'login/' + username + '/' + password)
-                // Axios.get(mysqlapi + 'login', {
-                //     username,
-                //     password
-                // })
+            // Axios.get(mysqlapi + 'login/' + username + '/' + password)
+            Axios.post(mysqlapi + 'login', {
+                username,
+                password
+            })
                 .catch((err) => {
                     var error = JSON.stringify(err.response.data.message);
                     console.log(err.response.data);
@@ -35,8 +35,10 @@ class Loginpage extends Component {
                         console.log('no response');
                     }
                     else {
-                        alert('welcome ' + res.data[0].username)
-                        localStorage.setItem('username', res.data[0].username)
+                        alert('welcome ' + res.data.username)
+                        console.log(res.data);
+                        localStorage.setItem('username', res.data.username)
+                        localStorage.setItem('token', res.data.token)
                         this.setState({ edirect: true })
                     }
                 })
@@ -47,6 +49,7 @@ class Loginpage extends Component {
         if (this.state.edirect) {
             return <Redirect to='/' />
         }
+        // console.log(res.data);
         return (
             <div style={{
                 position: 'absolute', left: '50%', top: '50%',
