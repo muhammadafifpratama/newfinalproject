@@ -16,6 +16,9 @@ import haaaah from './page/admin'
 import bungung from './page/adminlagi'
 import wuuu from './component/tes'
 import thanks from './page/thankyou'
+import email from './page/insertemail'
+import password from './page/changepassword'
+import verified from './page/verified'
 
 class App extends Component {
   state = {}
@@ -39,6 +42,9 @@ class App extends Component {
           <Route path="/admintes1" component={bungung} />
           <Route path="/asd" component={wuuu} />
           <Route path="/finish" component={thanks} />
+          <Route path="/forgot" component={email} />
+          <Route path="/password" component={password} />
+          <Route path="/verified" component={verified} />
         </Switch>
       </div>
     );

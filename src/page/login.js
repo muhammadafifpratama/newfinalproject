@@ -66,7 +66,7 @@ class Loginpage extends Component {
                         <br></br>
                         <Button variant="contained" color="secondary" style={{ minWidth: '185px' }} onClick={this.loginUser}>Login</Button>
                         <br></br><br></br>
-                        <Link to="/forgot_password">
+                        <Link to="/forgot">
                             <center>Forgot Password?</center>
                         </Link>
                     </div>
